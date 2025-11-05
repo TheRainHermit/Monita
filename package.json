@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "framer-motion": "^12.23.24",
+    "react-tooltip": "^5.30.0"
+  }
+}
