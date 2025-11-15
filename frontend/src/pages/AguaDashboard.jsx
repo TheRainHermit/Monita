@@ -15,7 +15,7 @@ import AnomaliesTable from "../components/AnomaliesTable";
 import ComparativeChart from "../components/ComparativeChart";
 import FiltersPanel from "../components/FiltersPanel";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 export default function AguaDashboard() {
   const zonasDisponibles = useAguaZonasDistinct();
@@ -56,6 +56,7 @@ export default function AguaDashboard() {
 
   return (
     <motion.div
+      className="main-content"
       style={{ background: "var(--color-bg)", color: "var(--color-text)", minHeight: "100vh" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -79,7 +80,7 @@ export default function AguaDashboard() {
         fechaFin={fechaFin}
         setFechaFin={setFechaFin}
       />
-      <div style={{ display: "flex", gap: 16, marginBottom: 24, alignItems: "center" }}>
+      <div className="dashboard-row" style={{ gap: 16, marginBottom: 24, alignItems: "center" }}>
         <label>
           <span data-tip="Zona a comparar (eje azul)" tabIndex={0}>Zona 1:</span>
           <select value={zona1} onChange={e => setZona1(e.target.value)} aria-label="Comparar zona 1">
@@ -95,7 +96,6 @@ export default function AguaDashboard() {
           </select>
         </label>
       </div>
-      {/* Feedback visual */}
       <div aria-live="polite">
         {loading && <div style={{ margin: "1rem 0" }}>🔄 Cargando datos...</div>}
         {!loading && (!series?.series?.length && !summary?.summary)

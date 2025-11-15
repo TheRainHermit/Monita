@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 // props: { total, promedio, maximo, minimo }
 export default function SummaryBox({ total, promedio, maximo, minimo }) {

@@ -3,7 +3,7 @@ import { fetchStats } from "../api";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 export default function StatsViewer({ resource, column }) {
   const [stats, setStats] = useState(null);

@@ -1,30 +1,17 @@
 import React, { useState } from "react";
-import { fetchDatasetSearch } from "../api";
+import { useAguaDatasets } from "../hooks/useAguaApi";
+import { useEnergiaDatasets } from "../hooks/useEnergiaApi";
 import Loader from "./Loader";
-import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 export default function DatasetSearch({ onSelectDataset }) {
-  const [query, setQuery] = useState("");
-  const [datasets, setDatasets] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    try {
-      const data = await fetchDatasetSearch(query);
-      setDatasets(data.datasets || []);
-      toast.success("Datasets buscados exitosamente.");
-    } catch (err) {
-      setError("Error al buscar datasets.");
-      toast.error("Error al buscar datasets.");
-    }
-    setLoading(false);
-  };
+  const [fuente, setFuente] = useState("agua");
+  const { data: aguaData, loading: loadingAgua, error: errorAgua } = useAguaDatasets("");
+  const { data: energiaData, loading: loadingEnergia, error: errorEnergia } = useEnergiaDatasets("");
+  const datasets = fuente === "agua" ? aguaData?.datasets || [] : energiaData?.datasets || [];
+  const loading = fuente === "agua" ? loadingAgua : loadingEnergia;
+  const error = fuente === "agua" ? errorAgua : errorEnergia;
 
   return (
     <motion.div
@@ -39,39 +26,41 @@ export default function DatasetSearch({ onSelectDataset }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      aria-label="Buscador de datasets públicos"
+      aria-label="Selector de datasets por fuente"
     >
       <h3>
-        Buscar Datasets
+        Selecciona la fuente de datos
         <span
-          data-tip="Busca datasets públicos por palabra clave, por ejemplo: agua, energía, consumo"
+          data-tip="Elige si quieres ver datasets de agua o energía"
           tabIndex={0}
           style={{ marginLeft: 8, cursor: "help" }}
-          aria-label="Ayuda sobre búsqueda de datasets"
+          aria-label="Ayuda sobre selección de fuente"
         >
           ℹ️
         </span>
       </h3>
-      <form onSubmit={handleSearch} className="dataset-search-form" aria-label="Formulario de búsqueda de datasets">
-        <label htmlFor="dataset-query" style={{ display: "none" }}>Palabra clave</label>
-        <input
-          id="dataset-query"
-          type="text"
-          placeholder="Palabra clave (ej: agua, energía, consumo)"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label="Palabra clave para buscar datasets"
-        />
-        <button type="submit" data-tip="Buscar datasets con la palabra clave" aria-label="Buscar datasets">
-          Buscar
-        </button>
-      </form>
+      <div style={{ marginBottom: 16 }}>
+        <label htmlFor="fuente" style={{ marginRight: 8 }}>Fuente:</label>
+        <select
+          id="fuente"
+          value={fuente}
+          onChange={e => setFuente(e.target.value)}
+          aria-label="Seleccionar fuente de datasets"
+        >
+          <option value="agua">Agua</option>
+          <option value="energia">Energía</option>
+        </select>
+      </div>
       {loading && <Loader />}
-      {error && <div style={{ color: "red" }} aria-live="polite">{error}</div>}
+      {error && (
+        <div style={{ color: "red" }} aria-live="polite">
+          {typeof error === "string" ? error : error?.message || "Error desconocido"}
+        </div>
+      )}
       <ul className="dataset-list" aria-live="polite">
         {datasets.map((ds) => (
           <li key={ds.id}>
-            <strong>{ds.title}</strong>
+            <strong>{ds.nombre}</strong>
             <div style={{ fontSize: "0.98em", color: "var(--color-text)", margin: "6px 0" }}>
               {ds.notes?.slice(0, 120)}...
             </div>
@@ -89,8 +78,8 @@ export default function DatasetSearch({ onSelectDataset }) {
                   color: "var(--color-text)",
                   cursor: "pointer"
                 }}
-                aria-label={`Seleccionar dataset ${ds.title}`}
-                data-tip={`Seleccionar el dataset "${ds.title}" para analizar`}
+                aria-label={`Seleccionar dataset ${ds.nombre}`}
+                data-tip={`Seleccionar el dataset "${ds.nombre}" para analizar`}
               >
                 Seleccionar
               </button>

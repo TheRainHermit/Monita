@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 export default function AnomaliesTable({ anomalies }) {
   return (

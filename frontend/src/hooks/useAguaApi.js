@@ -93,19 +93,31 @@ export function useAguaComparativa(params) {
   return { data, loading, error };
 }
 
-export function useAguaDatasets() {
+export function useAguaDatasets(query) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (query == null) return;
     setLoading(true);
-    fetch(`${BASE_URL}/datasets`)
-      .then(res => res.json())
+    setError(null);
+    fetch(`${BASE_URL}/datasets?query=${encodeURIComponent(query)}`)
+      .then(async res => {
+        try {
+          return await res.json();
+        } catch (err) {
+          const text = await res.text();
+          setError(`Respuesta no JSON: ${text}`);
+          throw err;
+        }
+      })
       .then(setData)
-      .catch(setError)
+      .catch(err => {
+        setError(err.message || "Error desconocido");
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [query]);
 
   return { data, loading, error };
 }

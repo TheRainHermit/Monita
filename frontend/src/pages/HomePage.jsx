@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
-import landingImg from "../assets/landing.svg";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import landingImg from "/eco.svg";
 
 export default function HomePage() {
   return (

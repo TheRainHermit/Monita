@@ -1,7 +1,7 @@
 import React from "react";
 import { ClipLoader } from "react-spinners";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 export default function Loader() {
   return (

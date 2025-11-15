@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 const customSelectTheme = (base) => ({
   ...base,

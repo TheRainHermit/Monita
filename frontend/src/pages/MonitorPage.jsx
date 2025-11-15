@@ -5,7 +5,7 @@ import ColumnSelector from "../components/ColumnSelector";
 import StatsViewer from "../components/StatsViewer";
 import FilterTable from "../components/FilterTable";
 import { motion } from "framer-motion";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 export default function MonitorPage() {
   const [selectedDataset, setSelectedDataset] = useState(null);
@@ -15,7 +15,12 @@ export default function MonitorPage() {
   return (
     <motion.div
       className="main-content"
-      style={{ alignItems: "stretch", background: "var(--color-bg)", color: "var(--color-text)", minHeight: "100vh" }}
+      style={{
+        alignItems: "stretch",
+        background: "var(--color-bg)",
+        color: "var(--color-text)",
+        minHeight: "100vh"
+      }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -35,8 +40,8 @@ export default function MonitorPage() {
       >
         Busca conjuntos de datos públicos de consumo de agua y energía. Escribe una palabra clave y selecciona el dataset que más te interese.
       </p>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
-        <div>
+      <div className="monitor-layout" style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div className="monitor-sidebar">
           <DatasetSearch onSelectDataset={setSelectedDataset} />
           <ResourceSelector dataset={selectedDataset} onSelectResource={setSelectedResource} />
         </div>
