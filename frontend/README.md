@@ -1,12 +1,27 @@
-# React + Vite
+# Monita Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interfaz para exploración, filtrado, análisis y exportación de recursos tabulares conectada al backend Monita.
 
-Currently, two official plugins are available:
+## Características principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Tabla paginada** para visualizar datos tabulares de recursos seleccionados.
+- **Filtros interactivos por columna** y búsqueda rápida.
+- **KPIs automáticos**: métricas clave de columnas numéricas.
+- **Visualización de gráficos**: histograma, barras, pastel, línea.
+- **Exportación de datos filtrados**: descarga en CSV y XLSX.
+- **Accesibilidad avanzada**: navegación por teclado, roles ARIA, tooltips y ayuda contextual.
+- **Feedback visual**: indicadores de carga y mensajes de error claros.
 
-## Expanding the ESLint configuration
+## Flujos principales
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Selecciona un recurso tabular.
+2. Filtra datos usando los inputs por columna.
+3. Navega entre páginas con los botones "Anterior/Siguiente".
+4. Consulta KPIs y gráficos automáticos.
+5. Exporta los datos filtrados (CSV/XLSX) con los botones correspondientes.
+
+## Instalación y dependencias
+
+```bash
+npm install
+npm install recharts react-tooltip xlsx

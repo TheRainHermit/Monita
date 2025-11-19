@@ -24,7 +24,7 @@ export default function ResourceSelector({ dataset, onSelectResource }) {
       <h3>
         Recursos disponibles
         <span
-          data-tip="Selecciona un recurso del dataset para visualizar o analizar"
+          data-tip="Selecciona un recurso del dataset para visualizar, analizar o descargar"
           tabIndex={0}
           style={{ marginLeft: 8, cursor: "help" }}
           aria-label="Ayuda sobre selección de recursos"
@@ -34,7 +34,12 @@ export default function ResourceSelector({ dataset, onSelectResource }) {
       </h3>
       <ul className="dataset-list" aria-live="polite">
         {dataset.resources?.map((res) => {
-          const esPrincipal = res.url === dataset.url;
+          const fmt = (res.format || "").toLowerCase();
+          const url = res.url || "";
+          const esTabular = ["csv", "xlsx", "xls"].includes(fmt) && url.match(/\.(csv|xlsx|xls)$/i);
+          const esImagen = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
+          const esPdf = /\.pdf$/i.test(url);
+          const esPrincipal = url === dataset.url;
           return (
             <li
               key={res.id}
@@ -62,28 +67,56 @@ export default function ResourceSelector({ dataset, onSelectResource }) {
               <div style={{ fontSize: "0.98em", color: "var(--color-text)", margin: "6px 0" }}>
                 Formato: {res.format} {res.description ? `| ${res.description.slice(0, 60)}...` : ""}
               </div>
-              <div style={{ fontSize: "0.95em", color: "var(--color-primary)" }}>
-                <button
-                  onClick={() => {
-                    onSelectResource(res);
-                    toast.success("Recurso seleccionado.");
-                  }}
-                  style={{
-                    marginTop: 5,
-                    padding: "6px 18px",
-                    fontSize: "0.97em",
-                    borderRadius: 6,
-                    border: "none",
-                    background: "var(--color-primary)",
-                    color: "var(--color-text)",
-                    cursor: "pointer"
-                  }}
-                  aria-label={`Seleccionar recurso ${res.name || res.id}`}
-                  data-tip={`Seleccionar el recurso "${res.name || res.id}"`}
-                >
-                  Seleccionar
-                </button>
-              </div>
+              {esTabular ? (
+                <div style={{ fontSize: "0.95em", color: "var(--color-primary)" }}>
+                  <button
+                    onClick={() => {
+                      onSelectResource(res);
+                      toast.success("Recurso tabular seleccionado.");
+                    }}
+                    style={{
+                      marginTop: 5,
+                      padding: "6px 18px",
+                      fontSize: "0.97em",
+                      borderRadius: 6,
+                      border: "none",
+                      background: "var(--color-primary)",
+                      color: "var(--color-text)",
+                      cursor: "pointer"
+                    }}
+                    aria-label={`Seleccionar recurso ${res.name || res.id}`}
+                    data-tip={`Analizar el recurso "${res.name || res.id}"`}
+                  >
+                    Analizar
+                  </button>
+                </div>
+              ) : (
+                <div style={{ marginTop: 6 }}>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--color-primary)", marginRight: 10 }}
+                  >
+                    Descargar / Ver recurso
+                  </a>
+                  {esImagen && (
+                    <img src={url} alt={res.name} style={{ maxWidth: 150, marginTop: 8 }} />
+                  )}
+                  {esPdf && (
+                    <iframe
+                      src={url}
+                      title={res.name}
+                      style={{ width: 250, height: 150, marginTop: 8 }}
+                    />
+                  )}
+                  {!esImagen && !esPdf && (
+                    <div style={{ fontStyle: "italic", color: "#aaa" }}>
+                      No es un archivo tabular. Solo disponible para descarga o consulta manual.
+                    </div>
+                  )}
+                </div>
+              )}
             </li>
           );
         })}

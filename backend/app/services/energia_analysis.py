@@ -1,4 +1,5 @@
 import pandas as pd
+from app.services.ckan_client import search_datasets
 from app.config import ENERGIA_DATASET_URL
 from app.models.common import (
     TimeSeriesResponse, TimeSeriesItem, ZonasResponse, ZonaItem,
@@ -111,6 +112,7 @@ def seleccionar_recurso_principal(resources):
 
 def get_datasets():
     ckan_results = search_datasets(query="energia", rows=10)
+    #print("DEBUG ckan_results energia:", ckan_results)
     datasets = []
     for ds in ckan_results:
         resources = ds.get("resources", [])

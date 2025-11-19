@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Dict, Any, Optional
 
 class TimeSeriesItem(BaseModel):
     mes: str
@@ -29,6 +29,7 @@ class DatasetInfo(BaseModel):
     id: str
     nombre: str
     url: str
+    resources: list = []
 
 # Respuestas completas
 
@@ -55,3 +56,39 @@ class ZonasDistinctResponse(BaseModel):
 
 class TiposUsuarioDistinctResponse(BaseModel):
     tipos_usuario: List[str]
+
+class ResourcePreviewResponse(BaseModel):
+    columns: List[str]
+    rows: List[Dict[str, Any]]  # Cada fila es un dict columna:valor
+    total_rows: int
+
+class ResourceColumnsResponse(BaseModel):
+    columns: List[str]
+
+class ResourceFilterResponse(BaseModel):
+    columns: List[str]
+    rows: List[Dict[str, Any]]
+    page: int
+    total_pages: int
+    total: int
+
+class ColumnKPI(BaseModel):
+    column: str
+    count: int
+    mean: float = None
+    min: float = None
+    max: float = None
+    sum: float = None
+
+class ResourceKPIsResponse(BaseModel):
+    kpis: List[ColumnKPI]
+
+class ChartDataPoint(BaseModel):
+    label: str
+    value: float
+
+class ResourceChartResponse(BaseModel):
+    column: str
+    chart_type: str  # "histogram", "bar", "line", etc.
+    data: List[ChartDataPoint]
+

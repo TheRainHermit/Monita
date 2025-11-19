@@ -112,6 +112,7 @@ def seleccionar_recurso_principal(resources):
 
 def get_datasets():
     ckan_results = search_datasets(query="agua", rows=10)
+    #print("DEBUG ckan_results agua:", ckan_results)
     datasets = []
     for ds in ckan_results:
         resources = ds.get("resources", [])

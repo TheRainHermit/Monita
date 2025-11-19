@@ -1,4 +1,5 @@
 import React from "react";
+import { fetchColumns } from "../api";
 import { motion } from "framer-motion";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import Loader from "./Loader";

@@ -2,3 +2,7 @@ fastapi
 uvicorn
 requests
 pandas
+slowapi
+pytest
+httpx
+python-dotenv
